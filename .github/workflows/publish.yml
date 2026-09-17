@@ -1,0 +1,50 @@
+name: Publish to npm
+
+# Publishes via npm Trusted Publishing (OIDC) - no NPM_TOKEN required.
+#
+# Why not a token: npm invalidated granular access tokens that bypass 2FA (a
+# response to the 2026 supply-chain attacks), so token-based CI publishing on a
+# 2FA-enabled account now fails with EOTP. Trusted publishing replaces it and
+# generates the provenance attestation automatically, which n8n requires for
+# community-node verification.
+#
+# Prerequisite: a trusted publisher must be registered for this package at
+# npmjs.com -> package -> Settings -> Trusted Publisher, naming this repository
+# and this workflow file. See docs/PUBLISHING.md.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      # Mints the OIDC token that proves to npm this build came from this
+      # repository and commit. Trusted publishing does not work without it.
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing requires npm CLI 11.5.1 or later; Node 22 ships npm 10.
+      - run: npm install -g npm@latest
+
+      # n8n-workflow pulls in isolated-vm, a native module we never execute -
+      # only its TypeScript types are needed. Skipping install scripts avoids a
+      # slow and unnecessary native build.
+      - run: npm ci --ignore-scripts
+
+      - run: npm run build
+      - run: npm test
+      - run: npm run lint
+
+      # No --provenance flag: trusted publishing attaches the attestation
+      # automatically. No NODE_AUTH_TOKEN: OIDC handles authentication.
+      - run: npm publish --access public
