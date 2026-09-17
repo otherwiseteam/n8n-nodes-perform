@@ -1,0 +1,14 @@
+{
+	"node": "n8n-nodes-perform.performTrigger",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Sales", "Productivity"],
+	"resources": {
+		"credentialDocumentation": [
+			{ "url": "https://github.com/otherwiseteam/n8n-nodes-perform#credentials" }
+		],
+		"primaryDocumentation": [
+			{ "url": "https://github.com/otherwiseteam/n8n-nodes-perform#trigger" }
+		]
+	}
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+	<title>Perform</title>
+	<!--
+		Forward-leaning "P": a slanted stem, a rounded bowl and a short motion
+		stroke, drawn as thick round-capped strokes so the mark stays crisp at the
+		18px size n8n renders icons at.
+
+		Light variant: Perform violet on a transparent background.
+	-->
+	<g fill="none" stroke="#6D4AFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M20 56 L30 14 H41.5 a11 11 0 0 1 0 22 H25" />
+		<path d="M7 42 H13" />
+	</g>
+</svg>
